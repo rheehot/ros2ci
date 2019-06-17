@@ -25,8 +25,7 @@ apt-get -qq update && rosdep update && rosdep install -y \
 
 function build_workspace() {
 colcon build \
-    --symlink-install \
-    --cmake-args -DSECURITY=ON --no-warn-unused-cli
+    --symlink-install
 }
 
 function test_workspace() {

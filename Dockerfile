@@ -24,6 +24,15 @@ RUN apt-get -qq update && \
     apt-get -qq install ros-$ROS_DISTRO-ros-workspace -y && \
     rm -rf /var/lib/apt/lists/*
 
+# setup colcon mixin / meta
+RUN apt-get -qq update && \
+    apt-get -qq install python3-colcon-mixin -y && \
+    rm -rf /var/lib/apt/lists/*
+RUN colcon mixin add upstream https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml && \
+    colcon mixin update && \
+    colcon metadata add https://raw.githubusercontent.com/colcon/colcon-metadata-repository/master/index.yaml && \
+    colcon metadata update
+
 ARG REPO_SLUG=repo/to/test
 ARG CI_FOLDER=.ros2ci
 
@@ -43,7 +52,8 @@ RUN apt-get -qq update && rosdep install -y \
 RUN . /opt/ros/$ROS_DISTRO/setup.sh && colcon \
     build \
     --merge-install \
-    --cmake-args -DSECURITY=ON -DBUILD_TESTING=OFF --no-warn-unused-cli
+    --mixin build-testing-off build-type-debug
+    --cmake-args --no-warn-unused-cli
 
 ENV ROS_PACKAGE_PATH=$ROS2_UNDERLAY_WS/install/share:$ROS_PACKAGE_PATH
 
