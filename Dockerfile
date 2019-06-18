@@ -30,7 +30,7 @@ RUN apt-get -qq update && \
     rm -rf /var/lib/apt/lists/*
 RUN colcon mixin add upstream https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml && \
     colcon mixin update && \
-    colcon metadata add https://raw.githubusercontent.com/colcon/colcon-metadata-repository/master/index.yaml && \
+    colcon metadata add upstream https://raw.githubusercontent.com/colcon/colcon-metadata-repository/master/index.yaml && \
     colcon metadata update
 
 ARG REPO_SLUG=repo/to/test
@@ -52,8 +52,7 @@ RUN apt-get -qq update && rosdep install -y \
 RUN . /opt/ros/$ROS_DISTRO/setup.sh && colcon \
     build \
     --merge-install \
-    --mixin build-testing-off build-type-debug
-    --cmake-args --no-warn-unused-cli
+    --mixin build-testing-off rel-with-deb-info
 
 ENV ROS_PACKAGE_PATH=$ROS2_UNDERLAY_WS/install/share:$ROS_PACKAGE_PATH
 
@@ -68,4 +67,4 @@ COPY ./$CI_FOLDER/ros_entrypoint.sh /
 
 ENTRYPOINT ["/ros_entrypoint.sh"]
 
-CMD ['bash']
+CMD ["bash"]

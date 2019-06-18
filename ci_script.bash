@@ -25,11 +25,11 @@ apt-get -qq update && rosdep update && rosdep install -y \
 
 function build_workspace() {
 colcon build \
+    --mixin build-testing-on rel-with-deb-info \
     --symlink-install
 }
 
 function test_workspace() {
-
 colcon test \
     --executor sequential \
     --event-handlers console_direct+
