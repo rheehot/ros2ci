@@ -12,16 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ARG FROM_IMAGE=osrf/ros2:devel
+ARG FROM_IMAGE=osrf/ros2:devel-bionic
 FROM $FROM_IMAGE
 
-ARG ROS_DISTRO=crystal
+ARG ROS_DISTRO=dashing
 ENV ROS_DISTRO=$ROS_DISTRO
 
 # install building tools
 RUN apt-get -qq update && \
     apt-get -qq upgrade -y && \
-    apt-get -qq install ros-$ROS_DISTRO-ros-workspace -y && \
+    if [ -e /opt/ros/$ROS_DISTRO/setup.bash ]; then true; else apt-get -qq install ros-$ROS_DISTRO-ros-workspace -y; fi && \
     rm -rf /var/lib/apt/lists/*
 
 ARG REPO_SLUG=repo/to/test
