@@ -19,9 +19,9 @@ if [[ "$1" != "crystal" ]] && [[ "$1" != "dashing" ]] && [[ "$1" != "nightly" ]]
 elif [[ "$1" == "nightly" ]]; then
   export base_image="osrf/ros2:nightly";
   # change this to dashing once first dashing nightlies are available
-  export ros_distro="crystal"
+  export ros_distro="dashing"
 elif [[ "$1" == "crystal" ]] || [[ "$1" == "dashing" ]]; then
-  export base_image="osrf/ros2:devel";
+  export base_image="osrf/ros2:devel-bionic";
   export ros_distro="$1"
 fi
 
